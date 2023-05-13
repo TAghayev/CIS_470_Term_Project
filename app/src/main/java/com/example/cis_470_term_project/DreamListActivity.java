@@ -31,6 +31,16 @@ public class DreamListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dream_list);
+        searchButton = findViewById(R.id.search_button);
+        searchInput = findViewById(R.id.search_input);
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String searchTerm = searchInput.getText().toString().trim();
+                searchDreams(searchTerm);
+            }
+        });
 
         TextView welcomeMessage = findViewById(R.id.welcome_message);
         welcomeMessage.setText("Welcome to Dream Log. Log your dream and description. Your data is secure and only accessible on your account.");
@@ -55,6 +65,7 @@ public class DreamListActivity extends AppCompatActivity {
             }
         });
 
+
         dreamListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -72,6 +83,29 @@ public class DreamListActivity extends AppCompatActivity {
                 startActivity(dreamDetailIntent);
             }
         });
+
+        dreamListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Cursor dreams = databaseHelper.getUserDreams(userId);
+                dreams.moveToPosition(position);
+
+                int dreamId = dreams.getInt(0);
+                String dreamTitle = dreams.getString(2);
+                String dreamDescription = dreams.getString(3);
+
+                // Show a dialog or confirmation message before deleting the dream
+
+                // Delete the dream from the database
+                databaseHelper.deleteDream(dreamId);
+
+                // Remove the dream from the list
+                dreamList.remove(position);
+                dreamAdapter.notifyDataSetChanged();
+
+                return true;
+            }
+        });
     }
 
     @Override
@@ -84,8 +118,10 @@ public class DreamListActivity extends AppCompatActivity {
         dreamList.clear();
         Cursor dreams = databaseHelper.getUserDreams(userId);
         while (dreams.moveToNext()) {
-            String dream = dreams.getString(2) + ": " + dreams.getString(3);
-            dreamList.add(dream);
+            String dreamTitle = dreams.getString(2);
+            String dreamDescription = dreams.getString(3);
+            String dreamEntry = dreamTitle + ": " + dreamDescription;
+            dreamList.add(dreamEntry);
         }
         dreamAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dreamList);
         dreamListView.setAdapter(dreamAdapter);

@@ -27,4 +27,12 @@
         android:layout_height="wrap_content"
         android:textSize="18sp" />
 
+    <TextView
+        android:id="@+id/dream_analysis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dream_description"
+        android:layout_marginTop="16dp"
+        android:textSize="16sp"/>
+
 </LinearLayout>

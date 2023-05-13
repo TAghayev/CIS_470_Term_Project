@@ -1,31 +1,38 @@
 package com.example.cis_470_term_project;
 
-import android.os.Bundle;
-import android.widget.TextView;
+import java.util.Locale;
 
-import androidx.appcompat.app.AppCompatActivity;
+public class DreamAnalyzer {
 
-public class DreamAnalyzer extends AppCompatActivity {
+    public static String analyze(String description) {
+        String analysis = "Analysis: ";
+        String lowerDescription = description.toLowerCase(Locale.ROOT);
+        int count = 0;
 
-    private TextView dreamTitle;
-    private TextView dreamDate;
-    private TextView dreamDescription;
+        if (lowerDescription.contains("water")) {
+            analysis += "\n- Water: Represents emotions and the unconscious mind.";
+            count++;
+        }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dream_detail);
+        if (lowerDescription.contains("falling")) {
+            analysis += "\n- Falling: Indicates feelings of insecurity or anxiety.";
+            count++;
+        }
 
-        dreamTitle = findViewById(R.id.dream_title);
-        dreamDate = findViewById(R.id.dream_date);
-        dreamDescription = findViewById(R.id.dream_description);
+        if (lowerDescription.contains("flying")) {
+            analysis += "\n- Flying: Symbolizes freedom, ambition, and escaping limitations.";
+            count++;
+        }
 
-        String title = getIntent().getStringExtra("DREAM_TITLE");
-        String date = getIntent().getStringExtra("DREAM_DATE");
-        String description = getIntent().getStringExtra("DREAM_DESCRIPTION");
+        if (lowerDescription.contains("teeth")) {
+            analysis += "\n- Teeth: Represents concerns about self-image or fear of rejection.";
+            count++;
+        }
 
-        dreamTitle.setText(title);
-        dreamDate.setText(date);
-        dreamDescription.setText(description);
+        if (count == 0) {
+            analysis += "No specific keywords detected. This dream might be a reflection of your day-to-day experiences or emotions.";
+        }
+
+        return analysis;
     }
 }

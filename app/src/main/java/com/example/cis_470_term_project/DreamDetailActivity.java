@@ -11,8 +11,11 @@ public class DreamDetailActivity extends AppCompatActivity {
     private TextView dreamDate;
     private TextView dreamDescription;
 
+    private TextView dreamAnalysis;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dream_detail);
 
@@ -27,5 +30,8 @@ public class DreamDetailActivity extends AppCompatActivity {
         dreamTitle.setText(title);
         dreamDate.setText(date);
         dreamDescription.setText(description);
+
+        dreamAnalysis = findViewById(R.id.dream_analysis);
+        dreamAnalysis.setText(DreamAnalyzer.analyze(dreamDescription.getText().toString()));
     }
 }
