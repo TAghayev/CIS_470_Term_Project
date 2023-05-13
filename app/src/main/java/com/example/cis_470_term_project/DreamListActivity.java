@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -15,8 +17,9 @@ import java.util.ArrayList;
 
 public class DreamListActivity extends AppCompatActivity {
 
-    private Button addDreamButton;
+    private Button addDreamButton, searchButton;
     private ListView dreamListView;
+    private EditText searchInput;
 
     private UserDatabaseHelper databaseHelper;
     private ArrayList<String> dreamList;
@@ -31,8 +34,6 @@ public class DreamListActivity extends AppCompatActivity {
 
         TextView welcomeMessage = findViewById(R.id.welcome_message);
         welcomeMessage.setText("Welcome to Dream Log. Log your dream and description. Your data is secure and only accessible on your account.");
-
-
 
         addDreamButton = findViewById(R.id.add_dream_button);
         dreamListView = findViewById(R.id.dream_list_view);
@@ -53,16 +54,31 @@ public class DreamListActivity extends AppCompatActivity {
                 startActivity(addDreamIntent);
             }
         });
-    }
 
+        dreamListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Cursor dreams = databaseHelper.getUserDreams(userId);
+                dreams.moveToPosition(position);
+
+                String title = dreams.getString(2);
+                String date = dreams.getString(4);
+                String description = dreams.getString(3);
+
+                Intent dreamDetailIntent = new Intent(DreamListActivity.this, DreamDetailActivity.class);
+                dreamDetailIntent.putExtra("DREAM_TITLE", title);
+                dreamDetailIntent.putExtra("DREAM_DATE", date);
+                dreamDetailIntent.putExtra("DREAM_DESCRIPTION", description);
+                startActivity(dreamDetailIntent);
+            }
+        });
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
         fetchDreams();
     }
-
-
 
     private void fetchDreams() {
         dreamList.clear();
@@ -76,5 +92,16 @@ public class DreamListActivity extends AppCompatActivity {
     }
 
 
-}
+    private void searchDreams(String searchTerm) {
+        ArrayList<String> filteredDreams = new ArrayList<>();
 
+        for (String dream : dreamList) {
+            if (dream.toLowerCase().contains(searchTerm.toLowerCase())) {
+                filteredDreams.add(dream);
+            }
+        }
+
+        dreamAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, filteredDreams);
+        dreamListView.setAdapter(dreamAdapter);
+    }
+}

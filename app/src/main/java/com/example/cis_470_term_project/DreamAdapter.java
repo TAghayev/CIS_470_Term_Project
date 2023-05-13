@@ -47,6 +47,7 @@ public class DreamAdapter extends AppCompatActivity {
                 startActivity(addDreamIntent);
             }
         });
+
     }
 
     @Override
@@ -56,12 +57,14 @@ public class DreamAdapter extends AppCompatActivity {
     }
 
     private void fetchDreams() {
+        // Inside fetchDreams() method
         dreamList.clear();
         Cursor dreams = databaseHelper.getUserDreams(userId);
         while (dreams.moveToNext()) {
-            String dream = dreams.getString(2) + ": " + dreams.getString(3);
-            dreamList.add(dream);
+            int dreamId = dreams.getInt(0); // Retrieve the dream ID
+            dreamList.add(String.valueOf(dreamId)); // Store the dream ID in the list
         }
+
         dreamAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, dreamList);
         dreamListView.setAdapter(dreamAdapter);
     }

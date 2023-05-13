@@ -9,28 +9,21 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class AddDreamActivity extends AppCompatActivity {
-
     private EditText titleInput;
     private EditText descriptionInput;
     private Button addDreamButton;
-
     private UserDatabaseHelper databaseHelper;
-
     private int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_dream);
-
         titleInput = findViewById(R.id.title_input);
         descriptionInput = findViewById(R.id.description_input);
         addDreamButton = findViewById(R.id.add_dream_button);
-
         databaseHelper = new UserDatabaseHelper(this);
-
         userId = getIntent().getIntExtra("USER_ID", -1);
-
         addDreamButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

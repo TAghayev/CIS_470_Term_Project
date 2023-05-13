@@ -22,6 +22,7 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".DreamListActivity" />
         <activity android:name=".AddDreamActivity" />
+        <activity android:name=".DreamDetailActivity" />
 
     </application>
 </manifest>

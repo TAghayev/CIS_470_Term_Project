@@ -12,7 +12,7 @@ import java.util.List;
 public class DreamDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "DreamDatabase";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     private static final String TABLE_DREAMS = "dreams";
     private static final String COLUMN_ID = "id";
